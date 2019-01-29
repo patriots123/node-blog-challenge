@@ -1,2 +1,10 @@
 language: node_js
 node_js: node
+deploy:
+  provider: heroku
+  api_key:
+    secure: mwXmqMH/6rnYuXqZkPpucJIIFiF4EfyqMToKo/krZiJpqDt24IDeIA3YAvrAymbpYQDe/sTEV06DYsn7pNcQQiIJqnw3uwgQA0nt4UH+U24Lt11XzgricBfd4dd2hE5stFeKneEvYBrFNpYTZNT1eQX6fA+BSU2ddIaNSiiWOAgmI8PcDEk3Vj/GgxxwI5x+wWzDF8aumEyX+zB5x7e/wGL5pd/pEoEvlFK3quiBEKxcLQ5YFroUgAfLh1f4EBHriaU4xREhOF3smd9hibr+NQiOn8QXw+L3yswi8yECK73MvLFa8cePXSCN+hRulNhrlI8dn6aMskZjJeThUiWGZSlteMN4MIAXjYE2DqPJZbG0HYKofrJG7NAYl719ieRswIs1PoGlZ1daDR7eFmmp9TNzibnig4Rw3TmU1WajhFSy+y0+4JfmkQEBtALXHUxOwJ+UFh2PPnugvBWS16v7ymouKIwsyUN4fiWTg3t0ajqKSE5VyWEyCcolqdxC/6CmlHxwB9MFgrtadzcq5Hn3GkVCqXhM6iGGut19kPg3Buk6oXGz94O+j4UL0W2Hg4Up6+NALMTXB49sVB5hIEn0sT3jM4vzcc9i7p3jObjRC+mN3+XIFj2KikwkwRWkkplCsQUjpBBUALSgnh4AzpogyzK4TYwsbVfYRC3ZphBhRVE=
+  app: dry-scrubland-14586
+  on:
+    repo: patriots123/node-blog-challenge
+    branch: tests-unit-integration
