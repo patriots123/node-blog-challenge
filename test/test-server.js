@@ -18,7 +18,7 @@ describe('blog-posts', function() {
       return closeServer();
     });
   
-    it('should list of blog posts on GET', function() {
+    it('should list blog posts on GET', function() {
       return chai
         .request(app)
         .get("/blog-posts")
@@ -76,18 +76,22 @@ describe('blog-posts', function() {
             return chai
               .request(app)
               .put(`/blog-posts/${updateData.id}`)
-              .send(updateData);
+              .send(updateData)
+              .then(function(res) {
+                expect(res).to.have.status(204);
+              });
           })
-          .then(function(res) {
-            expect(res).to.have.status(204);
+          .then(function() {
+            return chai
+              .request(app)
+              .get("/blog-posts")
+              .then(function(res) {
+            expect(res.body[0].title).to.be.equal(updateData.title);
+            expect(res.body[0].content).to.be.equal(updateData.content);
+            expect(res.body[0].author).to.be.equal(updateData.author);
+            expect(res.body[0].publishDate).to.be.equal(updateData.publishDate);
           })
-          .get("/blog-posts")
-          .then(function(res) {
-            expect(res.body[0].title === updateData.title);
-            expect(res.body[0].content === updateData.content);
-            expect(res.body[0].author === updateData.author);
-            expect(res.body[0].publishDate === updateData.publishDate);
-          })
+        })
       );
     });
   
