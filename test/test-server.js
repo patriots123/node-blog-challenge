@@ -9,7 +9,7 @@ const expect = chai.expect;
 
 chai.use(chaiHttp);
 
-describe('blogPostRouter', function() {
+describe('blog-posts', function() {
     before(function() {
       return runServer();
     });
@@ -18,17 +18,17 @@ describe('blogPostRouter', function() {
       return closeServer();
     });
   
-    it('should list recipes on GET', function() {
+    it('should list of blog posts on GET', function() {
       return chai
         .request(app)
-        .get("/recipes")
+        .get("/blog-posts")
         .then(function(res) {
           expect(res).to.have.status(200);
           expect(res).to.be.json;
           expect(res.body).to.be.a("array");
           expect(res.body.length).to.be.at.least(1);
   
-          const expectedKeys = ["name", "id", "ingredients"];
+          const expectedKeys = ["id", "title", "content", "author", "publishDate"];
           res.body.forEach(function(item) {
             expect(item).to.be.a("object");
             expect(item).to.include.keys(expectedKeys);
@@ -36,17 +36,22 @@ describe('blogPostRouter', function() {
         });
     });
   
-    it("should add an item on POST", function() {
-      const newItem = { name: "coffee", ingredients: ["water", "grounds"] };
+    it("should add a blog post on POST", function() {
+      const newItem = { 
+        title: "Interesting Article", 
+        content: "This is a really interesting article written by will shaughnessy",
+        author: "Will Shaughnessy",
+        publishDate: "2019-01-28"
+      };
       return chai
         .request(app)
-        .post("/recipes")
+        .post("/blog-posts")
         .send(newItem)
         .then(function(res) {
           expect(res).to.have.status(201);
           expect(res).to.be.json;
           expect(res.body).to.be.a("object");
-          expect(res.body).to.include.keys("name", "id", "ingredients");
+          expect(res.body).to.include.keys("id", "title", "content", "author", "publishDate");
           expect(res.body.id).to.not.equal(null);
           expect(res.body).to.deep.equal(
             Object.assign(newItem, { id: res.body.id })
@@ -54,25 +59,34 @@ describe('blogPostRouter', function() {
         });
     });
   
-    it("should update items on PUT", function() {
+    it("should update blog post on PUT", function() {
       const updateData = {
-        name: "boiled brown rice",
-        ingredients: ['water','brown rice'],
+        title: "Will is Cool",
+        content: "Will is Cool",
+        author: "will",
+        publishDate: "2019-01-29"
       };
   
       return (
         chai
           .request(app)
-          .get("/recipes")
+          .get("/blog-posts")
           .then(function(res) {
             updateData.id = res.body[0].id;
             return chai
               .request(app)
-              .put(`/recipes/${updateData.id}`)
+              .put(`/blog-posts/${updateData.id}`)
               .send(updateData);
           })
           .then(function(res) {
             expect(res).to.have.status(204);
+          })
+          .get("/blog-posts")
+          .then(function(res) {
+            expect(res.body[0].title === updateData.title);
+            expect(res.body[0].content === updateData.content);
+            expect(res.body[0].author === updateData.author);
+            expect(res.body[0].publishDate === updateData.publishDate);
           })
       );
     });
@@ -81,9 +95,9 @@ describe('blogPostRouter', function() {
       return (
         chai
           .request(app)
-          .get("/recipes")
+          .get("/blog-posts")
           .then(function(res) {
-            return chai.request(app).delete(`/recipes/${res.body[0].id}`);
+            return chai.request(app).delete(`/blog-posts/${res.body[0].id}`);
           })
           .then(function(res) {
             expect(res).to.have.status(204);
